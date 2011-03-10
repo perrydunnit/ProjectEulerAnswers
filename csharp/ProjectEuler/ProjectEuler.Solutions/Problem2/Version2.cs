@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 namespace ProjectEuler.Solutions.Problem2
 {
-    public class Version1:IEulerProblemSolution{
+    public class Version2:IEulerProblemSolution{
         public int ProblemNumber
         {
             get { return 2; }
@@ -8,7 +10,7 @@ namespace ProjectEuler.Solutions.Problem2
 
         public int ProblemVersion
         {
-            get { return 1; }
+            get { return 2; }
         }
 
         public string Description
@@ -25,7 +27,7 @@ namespace ProjectEuler.Solutions.Problem2
         public string ComputeAnswer()
         {
             int sum = 0;
-            int currentFibValue;
+            int currentFibValue=0;
             int i = 1;
             for (; (currentFibValue=Fibonacci(i)) < 4000000; i++)
             {
@@ -37,13 +39,16 @@ namespace ProjectEuler.Solutions.Problem2
             return string.Format("Sum: {0}, max fib number: {1}", sum, i);
         }
 
-        private int Fibonacci(int i)
+        private int Fibonacci(int j)
         {
-            if (i==1||i==2)
+            List<int> fibs = new List<int>{1,1};
+            while (fibs.Count<=j)
             {
-                return 1;
+                int count = fibs.Count;
+                fibs.Add(fibs[count-1]+fibs[count-2]);
             }
-            return Fibonacci(i - 1) + Fibonacci(i - 2);
+
+            return fibs[j];
         }
     }
 }
