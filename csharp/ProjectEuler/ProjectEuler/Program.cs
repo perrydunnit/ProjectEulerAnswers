@@ -2,15 +2,12 @@
 
 namespace ProjectEuler
 {
-    internal class Program
+    internal static class Program
     {
 
         private static void Main(string[] args)
         {
             new EulerCommandLine().Start(args);
-
-            Console.ReadKey();
-
         }
 
 
