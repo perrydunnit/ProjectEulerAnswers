@@ -47,3 +47,6 @@ namespace ProjectEuler.Solutions.Problem2
         }
     }
 }
+namespace ProjectEuler.Solutions.Problem3
+{
+}
