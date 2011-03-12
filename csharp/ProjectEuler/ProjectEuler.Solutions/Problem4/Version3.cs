@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 
 namespace ProjectEuler.Solutions.Problem4
 {
     [Export(typeof(IEulerProblemSolution))]
-    public class Version1 : IEulerProblemSolution
+    public class Version3 : IEulerProblemSolution
     {
         public int ProblemNumber
         {
@@ -15,7 +13,7 @@ namespace ProjectEuler.Solutions.Problem4
 
         public int ProblemVersion
         {
-            get { return 1; }
+            get { return 3; }
         }
 
         public string Description
@@ -26,8 +24,6 @@ namespace ProjectEuler.Solutions.Problem4
             }
         }
 
-        private readonly List<ProductPalendrome> _palendromes = new List<ProductPalendrome>();
-
         public string ComputeAnswer()
         {
             for (int i = 999; i > 0; i--)
@@ -35,9 +31,9 @@ namespace ProjectEuler.Solutions.Problem4
                 for (int j = i; j > 0; j--)
                 {
                     int product = j * i;
-                    if (IsPalendrome(product))
+                    if (product > MaxPalendrome.Product && IsPalendrome(product))
                     {
-                        _palendromes.Add(new ProductPalendrome(i,j));
+                        MaxPalendrome= new ProductPalendrome(i, j);
                     }
                 }
             }
@@ -45,13 +41,11 @@ namespace ProjectEuler.Solutions.Problem4
             return string.Format("{0} (product of {1} and {2})", max.Product, max.First, max.Second);
         }
 
+        private ProductPalendrome _maxPalendrome = new ProductPalendrome(0, 0);
         private ProductPalendrome MaxPalendrome
         {
-            get
-            {
-                int max = _palendromes.Max(x => x.Product);
-                return _palendromes.Find(p => p.Product == max);
-            }
+            get { return _maxPalendrome; }
+            set { _maxPalendrome = value; }
         }
 
         private static bool IsPalendrome(int number)

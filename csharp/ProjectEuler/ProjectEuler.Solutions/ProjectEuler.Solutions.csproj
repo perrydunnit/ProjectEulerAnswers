@@ -49,7 +49,12 @@
     <Compile Include="Problem3\Version1.cs" />
     <Compile Include="Problem2\Version2.cs" />
     <Compile Include="Problem2\Version3.cs" />
+    <Compile Include="Problem4\ProductPalendrome.cs" />
     <Compile Include="Problem4\Version1.cs" />
+    <Compile Include="Problem4\Version2.cs" />
+    <Compile Include="Problem4\Version3.cs" />
+    <Compile Include="Problem4\Version4.cs" />
+    <Compile Include="Problem4\Version5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

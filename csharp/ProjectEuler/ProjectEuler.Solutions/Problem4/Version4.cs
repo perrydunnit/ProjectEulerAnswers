@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 
 namespace ProjectEuler.Solutions.Problem4
 {
     [Export(typeof(IEulerProblemSolution))]
-    public class Version1 : IEulerProblemSolution
+    public class Version4 : IEulerProblemSolution
     {
         public int ProblemNumber
         {
@@ -15,18 +13,16 @@ namespace ProjectEuler.Solutions.Problem4
 
         public int ProblemVersion
         {
-            get { return 1; }
+            get { return 4; }
         }
 
         public string Description
         {
             get
             {
-                return "Find the largest palindrome made from the product of two 3-digit numbers.";
+                return "Find the largest palindrome made from the product of two 3-digit numbers. (Thanks Antoine!)";
             }
         }
-
-        private readonly List<ProductPalendrome> _palendromes = new List<ProductPalendrome>();
 
         public string ComputeAnswer()
         {
@@ -35,9 +31,9 @@ namespace ProjectEuler.Solutions.Problem4
                 for (int j = i; j > 0; j--)
                 {
                     int product = j * i;
-                    if (IsPalendrome(product))
+                    if (product > MaxPalendrome.Product && IsPalendrome(product))
                     {
-                        _palendromes.Add(new ProductPalendrome(i,j));
+                        MaxPalendrome = new ProductPalendrome(i, j);
                     }
                 }
             }
@@ -45,13 +41,11 @@ namespace ProjectEuler.Solutions.Problem4
             return string.Format("{0} (product of {1} and {2})", max.Product, max.First, max.Second);
         }
 
+        private ProductPalendrome _maxPalendrome = new ProductPalendrome(0, 0);
         private ProductPalendrome MaxPalendrome
         {
-            get
-            {
-                int max = _palendromes.Max(x => x.Product);
-                return _palendromes.Find(p => p.Product == max);
-            }
+            get { return _maxPalendrome; }
+            set { _maxPalendrome = value; }
         }
 
         private static bool IsPalendrome(int number)
@@ -61,19 +55,21 @@ namespace ProjectEuler.Solutions.Problem4
 
         private static int Reverse(int input)
         {
-            const int modulus = 10;
-            int currentInput = input;
-            int numOfDigits = (int)Math.Floor(Math.Log(input, modulus)) + 1;
-            int result = 0;
-            for (int i = 0; i < numOfDigits; i++)
+
+            double inputDouble = input;
+            double newNumber = 0;
+            while (inputDouble >= 1)
             {
-                result *= modulus;
-                var power = (int)Math.Pow(modulus, (i + 1));
-                result += currentInput % power / (power / modulus);
-                currentInput = (int)(Math.Floor((decimal)(currentInput / power)) * power);
+                inputDouble /= 10d;
+                double truncatedDouble = Math.Truncate(inputDouble);
+                newNumber += inputDouble - truncatedDouble;
+                newNumber *= 10;
+                inputDouble = truncatedDouble;
             }
-            return result;
+            return (int) newNumber;
         }
 
+
     }
+
 }

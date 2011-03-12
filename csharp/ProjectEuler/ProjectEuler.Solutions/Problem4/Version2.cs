@@ -6,7 +6,7 @@ using System.Linq;
 namespace ProjectEuler.Solutions.Problem4
 {
     [Export(typeof(IEulerProblemSolution))]
-    public class Version1 : IEulerProblemSolution
+    public class Version2 : IEulerProblemSolution
     {
         public int ProblemNumber
         {
@@ -15,7 +15,7 @@ namespace ProjectEuler.Solutions.Problem4
 
         public int ProblemVersion
         {
-            get { return 1; }
+            get { return 2; }
         }
 
         public string Description
@@ -26,7 +26,7 @@ namespace ProjectEuler.Solutions.Problem4
             }
         }
 
-        private readonly List<ProductPalendrome> _palendromes = new List<ProductPalendrome>();
+        private readonly List<ProductPalendrome> _palendromes = new List<ProductPalendrome>{new ProductPalendrome(0,0)};
 
         public string ComputeAnswer()
         {
@@ -35,9 +35,9 @@ namespace ProjectEuler.Solutions.Problem4
                 for (int j = i; j > 0; j--)
                 {
                     int product = j * i;
-                    if (IsPalendrome(product))
+                    if (product > MaxPalendrome.Product && IsPalendrome(product))
                     {
-                        _palendromes.Add(new ProductPalendrome(i,j));
+                        _palendromes.Add(new ProductPalendrome(i, j));
                     }
                 }
             }
