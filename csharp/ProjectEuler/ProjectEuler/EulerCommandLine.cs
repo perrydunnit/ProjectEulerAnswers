@@ -1,55 +1,75 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using ProjectEuler.Solutions;
 
 namespace ProjectEuler
 {
     public class EulerCommandLine
     {
-        private List<IEulerProblemSolution> _eulerProblemSolutions;
-        private Tuple<int, int> _problemToSolve;
+    	private Tuple<int, int> _problemToSolve;
+    	private readonly CompositionContainer _container;
+
+    	public EulerCommandLine()
+    	{
+    		var catalog = new AggregateCatalog();
+
+			catalog.Catalogs.Add(new AssemblyCatalog(typeof(IEulerProblemSolution).Assembly));
+
+			_container = new CompositionContainer(catalog);
+
+			//Fill the imports of this object
+			try
+			{
+				_container.ComposeParts(this);
+			}
+			catch (CompositionException compositionException)
+			{
+				Console.WriteLine(compositionException.ToString());
+			}
+
+    	}
 
         private List<IEulerProblemSolution> EulerProblemSolutions
         {
-            get
-            {
-                if (_eulerProblemSolutions == null)
-                {
-                    List<Type> solutionTypes = TypesImplementingInterface(typeof (IEulerProblemSolution));
-
-                    _eulerProblemSolutions = solutionTypes.FindAll(t => t.IsClass).ConvertAll(t =>
-                                                                                                  {
-                                                                                                      ConstructorInfo
-                                                                                                          constructorInfo
-                                                                                                              =
-                                                                                                              t.
-                                                                                                                  GetConstructor
-                                                                                                                  (new Type
-                                                                                                                       [
-                                                                                                                       0
-                                                                                                                       ]);
-                                                                                                      return
-                                                                                                          constructorInfo !=
-                                                                                                          null
-                                                                                                              ? constructorInfo
-                                                                                                                    .
-                                                                                                                    Invoke
-                                                                                                                    (null)
-                                                                                                                as
-                                                                                                                IEulerProblemSolution
-                                                                                                              : null;
-                                                                                                  });
-                    _eulerProblemSolutions.Sort((a, b) =>
-                                                a.ProblemNumber.CompareTo(b.ProblemNumber) != 0
-                                                    ? a.ProblemNumber.CompareTo(b.ProblemNumber)
-                                                    : a.ProblemVersion.CompareTo(b.ProblemVersion));
-                }
-                return _eulerProblemSolutions;
-            }
+			get
+			{
+				List<IEulerProblemSolution> eulerProblemSolutions = Solutions.ToList();
+				eulerProblemSolutions.Sort((a, b) =>
+										   a.ProblemNumber.CompareTo(b.ProblemNumber) != 0
+											   ? a.ProblemNumber.CompareTo(b.ProblemNumber)
+											   : a.ProblemVersion.CompareTo(b.ProblemVersion));
+				return eulerProblemSolutions;
+			}
         }
+		//private List<IEulerProblemSolution> EulerProblemSolutions
+		//{
+		//    get
+		//    {
+		//        if (_eulerProblemSolutions == null)
+		//        {
+		//            List<Type> solutionTypes = TypesImplementingInterface(typeof (IEulerProblemSolution));
+
+
+		//            _eulerProblemSolutions = solutionTypes.FindAll(
+		//                t => t.IsClass).ConvertAll(t =>
+		//                                            {
+		//                                                ConstructorInfo constructorInfo = t.GetConstructor(new Type[0]);
+		//                                                return constructorInfo != null
+		//                                                        ? constructorInfo.Invoke(null) as IEulerProblemSolution
+		//                                                        : null;
+		//                                            });
+		//            _eulerProblemSolutions.Sort((a, b) =>
+		//                                        a.ProblemNumber.CompareTo(b.ProblemNumber) != 0
+		//                                            ? a.ProblemNumber.CompareTo(b.ProblemNumber)
+		//                                            : a.ProblemVersion.CompareTo(b.ProblemVersion));
+		//        }
+		//        return _eulerProblemSolutions;
+		//    }
+		//}
 
         public void Start(string[] args)
         {
@@ -125,17 +145,11 @@ namespace ProjectEuler
             return timeTaken.TotalMilliseconds + " milliseconds";
         }
 
-        private static List<Type> TypesImplementingInterface(Type desiredType)
-        {
-            return AppDomain
-                .CurrentDomain
-                .GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(desiredType.IsAssignableFrom).ToList();
-        }
+		[ImportMany]
+		private IEnumerable<IEulerProblemSolution> Solutions { get; set; }
 
 
-        private void DetermineProblemToSolve()
+    	private void DetermineProblemToSolve()
         {
             string response = Console.ReadLine();
             if (response != String.Empty)

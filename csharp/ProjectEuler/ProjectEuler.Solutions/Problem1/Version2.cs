@@ -1,6 +1,9 @@
+using System.ComponentModel.Composition;
+
 namespace ProjectEuler.Solutions.Problem1
 {
-    public class Version2 : IEulerProblemSolution
+	[Export(typeof(IEulerProblemSolution))]
+	public class Version2 : IEulerProblemSolution
     {
         public int ProblemNumber
         {

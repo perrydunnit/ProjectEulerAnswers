@@ -1,8 +1,9 @@
-using System;
+using System.ComponentModel.Composition;
 
 namespace ProjectEuler.Solutions.Problem1
 {
-    public class Version3 : IEulerProblemSolution
+	[Export(typeof(IEulerProblemSolution))]
+	public class Version3 : IEulerProblemSolution
     {
         public int ProblemNumber
         {
@@ -37,8 +38,4 @@ namespace ProjectEuler.Solutions.Problem1
             return total.ToString();
         }
     }
-}
-
-namespace ProjectEuler.Solutions.Problem2
-{
 }

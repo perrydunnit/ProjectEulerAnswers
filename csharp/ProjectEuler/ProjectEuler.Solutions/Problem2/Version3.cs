@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 
 namespace ProjectEuler.Solutions.Problem2
 {
-    public class Version3 : IEulerProblemSolution
+	[Export(typeof(IEulerProblemSolution))]
+	public class Version3 : IEulerProblemSolution
     {
         public int ProblemNumber
         {
@@ -28,12 +30,11 @@ namespace ProjectEuler.Solutions.Problem2
 
         public string ComputeAnswer()
         {
-            int sum;
-            int i = 1;
+        	int i = 1;
             for (; Fibonacci(i) < 4000000; i++)
             {
             }
-            sum = fibs.FindAll(x => x % 2 == 0).Sum();
+            int sum = fibs.FindAll(x => x % 2 == 0).Sum();
             return string.Format("Sum: {0}, max fib number: {1}", sum, i);
         }
 
