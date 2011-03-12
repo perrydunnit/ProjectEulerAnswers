@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ProjectEuler.Solutions.Problem4
 {
     public struct ProductPalendrome

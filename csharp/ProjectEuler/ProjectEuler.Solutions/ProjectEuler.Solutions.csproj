@@ -49,6 +49,7 @@
     <Compile Include="Problem3\Version1.cs" />
     <Compile Include="Problem2\Version2.cs" />
     <Compile Include="Problem2\Version3.cs" />
+    <Compile Include="Problem3\Version2.cs" />
     <Compile Include="Problem4\ProductPalendrome.cs" />
     <Compile Include="Problem4\Version1.cs" />
     <Compile Include="Problem4\Version2.cs" />
